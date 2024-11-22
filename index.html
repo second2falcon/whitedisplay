@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screen Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #333; /* Border color is always the same */
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .button:hover {
+      transform: scale(1.1);
+    }
+
+    .fullscreen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Screen Test</h1>
+    <p>Click a color to test your screen in fullscreen mode. Press ESC to exit fullscreen.</p>
+    <div class="buttons">
+      <button class="button" style="background-color: white;" onclick="enterFullscreen('white')"></button>
+      <button class="button" style="background-color: black;" onclick="enterFullscreen('black')"></button>
+      <button class="button" style="background-color: #ff0000;" onclick="enterFullscreen('#ff0000')"></button> <!-- Red -->
+      <button class="button" style="background-color: #00ff00;" onclick="enterFullscreen('#00ff00')"></button> <!-- Green -->
+      <button class="button" style="background-color: #0000ff;" onclick="enterFullscreen('#0000ff')"></button> <!-- Blue -->
+    </div>
+  </div>
+
+  <div id="fullscreen" class="fullscreen"></div>
+
+  <script>
+    const fullscreenDiv = document.getElementById('fullscreen');
+
+    function enterFullscreen(color) {
+      fullscreenDiv.style.backgroundColor = color;
+      fullscreenDiv.style.display = 'block';
+
+      if (fullscreenDiv.requestFullscreen) {
+        fullscreenDiv.requestFullscreen();
+      } else if (fullscreenDiv.webkitRequestFullscreen) { // Safari
+        fullscreenDiv.webkitRequestFullscreen();
+      } else if (fullscreenDiv.msRequestFullscreen) { // IE/Edge
+        fullscreenDiv.msRequestFullscreen();
+      }
+    }
+
+    // Listener for exiting fullscreen
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        exitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', exitFullscreen);
+    document.addEventListener('webkitfullscreenchange', exitFullscreen); // Safari
+    document.addEventListener('msfullscreenchange', exitFullscreen); // IE/Edge
+
+    function exitFullscreen() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+        fullscreenDiv.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
